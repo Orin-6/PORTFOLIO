@@ -4,21 +4,8 @@ const $ = s => document.querySelector(s),
 $('#yr').textContent = new Date().getFullYear();
 
 /* photo, progress, glow */
-const PHOTO = 'orin.jpg'; // optional: permanent photo, e.g. 'photo.jpg' or a hosted image URL
-function showPhoto(src) { $('#photoImg').src = src; $('#photoImg').hidden = false }
-let saved = ''; try { saved = localStorage.getItem('rso_photo') || '' } catch (e) { }
-if (PHOTO) showPhoto(PHOTO); else if (saved) showPhoto(saved);
-$('#avatarBtn').onclick = () => $('#photoIn').click();
-$('#avatarBtn').onkeydown = e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); $('#photoIn').click() } };
-$('#photoIn').onchange = e => {
-  const f = e.target.files[0]; if (!f) return; const rd = new FileReader();
-  rd.onload = () => {
-    const im = new Image(); im.onload = () => {
-      const s = 400, c = document.createElement('canvas'); c.width = c.height = s; const x = c.getContext('2d'), m = Math.min(im.width, im.height);
-      x.drawImage(im, (im.width - m) / 2, (im.height - m) / 2, m, m, 0, 0, s, s); const url = c.toDataURL('image/jpeg', .85); showPhoto(url); try { localStorage.setItem('rso_photo', url) } catch (err) { }
-    }; im.src = rd.result
-  }; rd.readAsDataURL(f)
-};
+const PHOTO = 'orin.jpg'; // photo change korte chaile ei nam-er file ta replace korun (ba URL din)
+if (PHOTO) { $('#photoImg').src = PHOTO; $('#photoImg').hidden = false }
 addEventListener('scroll', () => { $('#prog').style.width = scrollY / (document.body.scrollHeight - innerHeight) * 100 + '%' });
 if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
   addEventListener('pointermove', e => { $('#glow').style.left = e.clientX + 'px'; $('#glow').style.top = e.clientY + 'px' });
