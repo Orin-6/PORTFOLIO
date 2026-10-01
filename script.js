@@ -4,7 +4,7 @@ const $ = s => document.querySelector(s),
 $('#yr').textContent = new Date().getFullYear();
 
 /* photo, progress, glow */
-const PHOTO = 'orin.jpg'; // photo change korte chaile ei nam-er file ta replace korun (ba URL din)
+const PHOTO = 'orin.jpg'; 
 if (PHOTO) { $('#photoImg').src = PHOTO; $('#photoImg').hidden = false }
 addEventListener('scroll', () => { $('#prog').style.width = scrollY / (document.body.scrollHeight - innerHeight) * 100 + '%' });
 if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
