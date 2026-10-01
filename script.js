@@ -109,11 +109,11 @@ render();
 
 /* certificates */
 const C = [
-  { t: 'Data Analytics Professional', i: 'Ostad · 2026', d: 'Covers data cleaning, analysis, SQL, spreadsheets and visualisation.', id: 'GDA-000001', ic: '📊' },
-  { t: 'Power BI Data Analyst', i: 'Ostad · 2025', d: 'Data modelling, DAX measures and report design in Power BI.', id: 'PL300-000002', ic: '📈' },
-  { t: 'Python for Data Science', i: 'FreeCode Camp · 2026', d: 'Python, pandas, NumPy and Matplotlib for data work.', id: 'IBM-PY-000003', ic: '🐍' },
-  { t: 'Machine Learning Specialization', i: 'Coursera · 2025', d: 'Supervised and unsupervised learning, model evaluation and tuning.', id: 'ML-000004', ic: '🤖' },
-  { t: 'SQL and Relational Databases', i: 'FreeCode Camp · 2024', d: 'Querying, joins, subqueries and database design with MySQL.', id: 'SQL-000005', ic: '🗄️' }];
+  { t: 'Data Analytics Professional', i: 'Ostad · 2026', d: 'Covers data cleaning, analysis, SQL, spreadsheets and visualisation.', ic: '📊' },
+  { t: 'Power BI Data Analyst', i: 'Ostad · 2025', d: 'Data modelling, DAX measures and report design in Power BI.', ic: '📈' },
+  { t: 'Python for Data Science', i: 'FreeCode Camp · 2026', d: 'Python, pandas, NumPy and Matplotlib for data work.', ic: '🐍' },
+  { t: 'Machine Learning Specialization', i: 'Coursera · 2025', d: 'Supervised and unsupervised learning, model evaluation and tuning.', ic: '🤖' },
+  { t: 'SQL and Relational Databases', i: 'FreeCode Camp · 2024', d: 'Querying, joins, subqueries and database design with MySQL.', ic: '🗄️' }];
 $('#certGrid').innerHTML = C.map((c, n) => `<button class="card lift p-5 text-left" data-n="${n}"><div class="text-3xl">${c.ic}</div><h3 class="font-bold mt-3">${c.t}</h3><p class="muted text-sm">${c.i}</p><p class="acc text-sm mt-3" style="color:var(--a)">View details</p></button>`).join('');
 const dlg = $('#dlg'); document.querySelectorAll('#certGrid button').forEach(b => b.onclick = () => { const c = C[b.dataset.n]; $('#dT').textContent = c.t; $('#dI').textContent = c.i; $('#dD').textContent = c.d; $('#dC').textContent = 'Credential ID: ' + c.id; dlg.showModal() });
 $('#dX').onclick = () => dlg.close(); $('#dV').onclick = () => { $('#dC').textContent = 'Add your credential link here to enable verification.' };
