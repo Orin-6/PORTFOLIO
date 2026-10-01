@@ -20,7 +20,9 @@ $('#photoIn').onchange = e => {
   }; rd.readAsDataURL(f)
 };
 addEventListener('scroll', () => { $('#prog').style.width = scrollY / (document.body.scrollHeight - innerHeight) * 100 + '%' });
-addEventListener('pointermove', e => { $('#glow').style.left = e.clientX + 'px'; $('#glow').style.top = e.clientY + 'px' });
+if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
+  addEventListener('pointermove', e => { $('#glow').style.left = e.clientX + 'px'; $('#glow').style.top = e.clientY + 'px' });
+}
 
 /* typing + counters */
 const words = ['patterns.', 'insights.', 'forecasts.', 'answers.']; let wi = 0, ci = 0, del = false;
