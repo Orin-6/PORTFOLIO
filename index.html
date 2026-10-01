@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rabyea Sultana Orin – Data Science & Machine Learning</title>
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=DM+Sans:wght@400;500&display=swap"
+    rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+  <!-- <head> er bhitore, Google Fonts link er por -->
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="prog"></div>
+  <div id="glow"></div>
+
+  <header class="sticky top-0 z-40 backdrop-blur"
+    style="background:color-mix(in srgb,var(--bg) 75%,transparent);border-bottom:1px solid var(--line);padding-top:env(safe-area-inset-top,0px)">
+    <nav class="max-w-6xl mx-auto px-5 py-3 flex items-center justify-between">
+      <a href="#top" class="disp font-extrabold text-lg"><span class="grad">RSO</span></a>
+      <div class="hidden md:flex gap-6 text-sm muted">
+        <a href="#top" class="hover:opacity-70">Home</a><a href="#skills" class="hover:opacity-70">Skills</a><a
+          href="#projects" class="hover:opacity-70">Projects</a><a href="#certs"
+          class="hover:opacity-70">Certificates</a><a href="#experience" class="hover:opacity-70">Education</a><a
+          href="#contact" class="hover:opacity-70">Contact</a>
+      </div>
+      <a href="mailto:rsarin166@gmail.com?subject=Hiring%20inquiry" class="btn pri text-sm">Hire me</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="relative max-w-6xl mx-auto px-5 pt-14 pb-16 grid lg:grid-cols-2 gap-10 items-center">
+      <canvas id="net" class="absolute inset-0 w-full h-full -z-10 opacity-70" aria-hidden="true"></canvas>
+      <div>
+        <div class="avatar" id="avatarBtn" role="button" tabindex="0" title="Click to add your photo"
+          aria-label="Add your photo" style="cursor:pointer">
+          <div><img id="photoImg" alt="Rabyea Sultana Orin" hidden></div>
+        </div>
+        <input type="file" id="photoIn" accept="image/*" hidden>
+        <p class="tag inline-block mb-4">Data Science · Machine Learning · Python · SQL · Power BI</p>
+        <h1 class="text-5xl md:text-6xl font-extrabold leading-[1.03]">Aspiring data scientist who teaches machines to
+          find <span id="typed" class="grad"></span><span class="animate-pulse">|</span></h1>
+        <p class="muted mt-6 max-w-md">Hi, I'm Rabyea Sultana Orin, a Computer Science and Engineering student. I build
+          data-driven solutions with Python, SQL and machine learning, and I'm learning to turn results into decisions a
+          team can act on.</p>
+        <div class="flex flex-wrap gap-3 mt-8"><a href="#projects" class="btn pri">View projects</a><a href="#certs"
+            class="btn">See certificates</a></div>
+        <dl class="grid grid-cols-3 gap-4 mt-10 max-w-md">
+          <div>
+            <dt class="muted text-xs">Projects built</dt>
+            <dd class="disp text-2xl font-bold grad" data-count="15">0</dd>
+          </div>
+          <div>
+            <dt class="muted text-xs">Certificates</dt>
+            <dd class="disp text-2xl font-bold grad" data-count="3">0</dd>
+          </div>
+          <div>
+            <dt class="muted text-xs">Tools mastered</dt>
+            <dd class="disp text-2xl font-bold grad" data-count="24">0</dd>
+          </div>
+        </dl>
+      </div>
+      <div class="card p-4" id="playground">
+        <div class="flex items-center justify-between mb-2">
+          <h2 class="disp font-bold text-lg">Fit a line, live</h2><span class="muted text-xs">Click the plot to add
+            points</span>
+        </div>
+        <canvas id="reg" class="w-full rounded-lg"
+          style="height:280px;background:var(--bg);border:1px solid var(--line);cursor:crosshair"
+          aria-label="Interactive linear regression plot"></canvas>
+        <div class="grid grid-cols-4 gap-2 mt-3 text-center text-sm">
+          <div>
+            <div class="muted text-xs">Slope</div><b id="m">–</b>
+          </div>
+          <div>
+            <div class="muted text-xs">Intercept</div><b id="b">–</b>
+          </div>
+          <div>
+            <div class="muted text-xs">R²</div><b id="r2">–</b>
+          </div>
+          <div>
+            <div class="muted text-xs">MSE</div><b id="mse">–</b>
+          </div>
+        </div>
+        <div class="flex flex-wrap gap-2 mt-3"><button class="btn pri text-sm" id="train">Train with gradient
+            descent</button><button class="btn text-sm" id="reset">New data</button><button class="btn text-sm"
+            id="clear">Clear</button></div>
+        <p id="epoch" class="muted text-xs mt-2 min-h-[1rem]" role="status"></p>
+      </div>
+    </section>
+
+    <div class="mq" aria-hidden="true">
+      <div><span>Python</span><span>SQL</span><span>MySQL</span><span>Power BI</span><span>DAX</span><span>Power
+          Query</span><span>Pandas</span><span>NumPy</span><span>Matplotlib</span><span>Excel</span><span>Machine
+          Learning</span><span>Jupyter</span><span>Git</span><span>GitHub</span><span>C++</span><span>Java</span><span>JavaScript</span><span>Python</span><span>SQL</span><span>MySQL</span><span>Power
+          BI</span><span>DAX</span><span>Power
+          Query</span><span>Pandas</span><span>NumPy</span><span>Matplotlib</span><span>Excel</span><span>Machine
+          Learning</span><span>Jupyter</span><span>Git</span><span>GitHub</span><span>C++</span><span>Java</span><span>JavaScript</span>
+      </div>
+    </div>
+
+    <section id="skills" class="max-w-6xl mx-auto px-5 py-14">
+      <h2 class="sec text-4xl font-bold mb-2">Skills</h2>
+      <p class="muted mb-8">Pick a category to see what I use and how strong I am with it.</p>
+      <div class="grid lg:grid-cols-5 gap-6">
+        <div class="card p-5 lg:col-span-2"><canvas id="radar" height="300"
+            aria-label="Skill category radar chart"></canvas></div>
+        <div class="card p-6 lg:col-span-3">
+          <div class="flex flex-wrap gap-2 mb-5" id="skTabs" role="tablist"></div>
+          <div class="grid sm:grid-cols-2 gap-x-8 gap-y-4" id="skBody"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="process" class="max-w-6xl mx-auto px-5 py-14">
+      <h2 class="sec text-4xl font-bold mb-8">How I work</h2>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
+        <div class="card lift step p-5">
+          <div class="n">1</div>
+          <h3 class="font-bold">Collect</h3>
+          <p class="muted text-sm mt-1">Pull data from databases, spreadsheets and files with SQL and Python.</p>
+        </div>
+        <div class="card lift step p-5">
+          <div class="n">2</div>
+          <h3 class="font-bold">Clean</h3>
+          <p class="muted text-sm mt-1">Fix types, duplicates, outliers and gaps with pandas and Power Query.</p>
+        </div>
+        <div class="card lift step p-5">
+          <div class="n">3</div>
+          <h3 class="font-bold">Analyse</h3>
+          <p class="muted text-sm mt-1">Explore patterns and test ideas with statistics and NumPy.</p>
+        </div>
+        <div class="card lift step p-5">
+          <div class="n">4</div>
+          <h3 class="font-bold">Model</h3>
+          <p class="muted text-sm mt-1">Train and evaluate machine learning models in Jupyter.</p>
+        </div>
+        <div class="card lift step p-5">
+          <div class="n">5</div>
+          <h3 class="font-bold">Present</h3>
+          <p class="muted text-sm mt-1">Build Power BI and Matplotlib visuals and explain the result clearly.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="projects" class="max-w-6xl mx-auto px-5 py-14">
+      <div class="flex flex-wrap items-end justify-between gap-4 mb-8">
+        <h2 class="sec text-4xl font-bold">Selected projects</h2>
+        <div class="flex gap-2 flex-wrap" id="filters"></div>
+      </div>
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-5" id="grid"></div>
+    </section>
+
+    <section id="certs" class="max-w-6xl mx-auto px-5 py-14">
+      <h2 class="sec text-4xl font-bold mb-2">Certificates</h2>
+      <p class="muted mb-8">Select a certificate for details. Replace these with your real credentials.</p>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5" id="certGrid"></div>
+    </section>
+
+    <section id="experience" class="max-w-6xl mx-auto px-5 py-14">
+      <h2 class="sec text-4xl font-bold mb-8">Education and learning</h2>
+      <div class="grid gap-7 max-w-3xl">
+        <div class="tl">
+          <p class="muted text-sm">2024 – Continuing</p>
+          <h3 class="font-bold text-lg">B.Sc. in Computer Science and Engineering, Eastern University</h3>
+          <p class="muted">Studying machine learning, deep learning and data science, with coursework in programming,
+            databases and statistics.</p>
+        </div>
+        <div class="tl">
+          <p class="muted text-sm">2024 – Present</p>
+          <h3 class="font-bold text-lg">Self-directed learning in data analytics</h3>
+          <p class="muted">Learning Python, SQL, Power BI and machine learning through online courses and hands-on
+            practice projects.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="max-w-6xl mx-auto px-5 py-14">
+      <div class="card p-8 grid md:grid-cols-2 gap-8">
+        <div>
+          <h2 class="text-3xl font-bold">Let's work on your data</h2>
+          <p class="muted mt-3">Open to analytics, BI and ML roles. I reply within two days.</p>
+          <p class="mt-6 text-sm"><a class="underline" href="mailto:missrabyeasultana6@gmail.com">missrabyeasultana6@gmail.com</a><br><a
+              class="underline" href="https://www.linkedin.com/in/rabyea-sultana-orin-649a89329" target="_blank"
+              rel="noopener">linkedin.com/in/rabyea-sultana-orin-649a89329</a></p><a
+            href="mailto:missrabyeasultana6@gmail.com?subject=Hiring%20inquiry" class="btn pri inline-block mt-6">Hire me</a>
+        </div>
+        <div class="grid gap-3">
+          <label class="text-sm">Name<input id="fn" class="in"></label><label class="text-sm">Email<input id="fe"
+              type="email" class="in"></label>
+          <label class="text-sm">Message<textarea id="fm" rows="3" class="in"></textarea></label>
+          <button class="btn pri" id="send">Send message</button>
+          <p id="msg" class="text-sm" role="status"></p>
+        </div>
+      </div>
+      <p class="muted text-sm text-center mt-10">© <span id="yr"></span> Rabyea Sultana Orin</p>
+    </section>
+  </main>
+  <a href="#top" id="top2" class="btn pri" aria-label="Back to top">↑</a>
+
+  <dialog id="dlg">
+    <h3 id="dT" class="disp font-bold text-xl"></h3>
+    <p id="dI" class="muted text-sm mt-1"></p>
+    <p id="dD" class="mt-4 text-sm"></p>
+    <p id="dC" class="muted text-xs mt-3"></p>
+    <div class="flex gap-2 mt-5"><button class="btn pri text-sm" id="dV">Verify credential</button><button
+        class="btn text-sm" id="dX">Close</button></div>
+  </dialog>
+
+  <!-- </body> er ager, Tailwind ar Chart.js er por -->
+  <script src="script.js"></script>
+</body>
+
+</html>
