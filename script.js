@@ -7,14 +7,15 @@ $('#yr').textContent = new Date().getFullYear();
 
 /* photo, progress, glow */
 const PHOTO = 'orin.jpg';
+
 if (PHOTO) {
   $('#photoImg').src = PHOTO;
   $('#photoImg').hidden = false;
 }
 
 addEventListener('scroll', () => {
-  $('#prog').style.width =
-    scrollY / (document.body.scrollHeight - innerHeight) * 100 + '%';
+  const total = document.body.scrollHeight - innerHeight;
+  $('#prog').style.width = (total > 0 ? scrollY / total * 100 : 0) + '%';
 });
 
 if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
@@ -82,6 +83,7 @@ function nsize() {
 
 nc.parentElement.addEventListener('pointermove', e => {
   const r = nc.getBoundingClientRect();
+
   mouse = {
     x: e.clientX - r.left,
     y: e.clientY - r.top
@@ -502,7 +504,7 @@ const P = [
     c: 'Database',
     d: 'Analyzed credit card transaction data collected from Kaggle. Converted the dataset into Excel format, imported it into MySQL, and performed SQL-based analysis to identify fraudulent transactions, calculate fraud rates, and explore transaction patterns.',
     s: ['MySQL', 'SQL', 'Excel', 'Kaggle'],
-    url: 'https://github.com/Orin-6/YOUR-REPOSITORY-NAME'
+    url: 'https://github.com/Orin-6'
   },
 
   {
@@ -542,14 +544,16 @@ function render() {
           ${p.s.map(x => `<span class="tag">${x}</span>`).join('')}
         </div>
 
-        <div class="mt-5">
-          ${p.url ? `
-            <a href="${p.url}" target="_blank"
-               rel="noopener noreferrer" class="btn pri inline-block text-sm">
+        ${p.url ? `
+          <div class="mt-5">
+            <a href="${p.url}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn pri inline-block text-sm">
                View on GitHub ↗
             </a>
-          ` : ''}
-        </div>
+          </div>
+        ` : ''}
       </article>
     `).join('');
 
@@ -569,35 +573,40 @@ const C = [
     t: 'Data Analytics Professional',
     i: 'Ostad · 2026',
     d: 'Covers data cleaning, analysis, SQL, spreadsheets and visualisation.',
-    ic: '📊'
+    ic: '📊',
+    id: ''
   },
 
   {
     t: 'Power BI Data Analyst',
     i: 'Ostad · 2025',
     d: 'Data modelling, DAX measures and report design in Power BI.',
-    ic: '📈'
+    ic: '📈',
+    id: ''
   },
 
   {
     t: 'Python for Data Science',
     i: 'FreeCode Camp · 2026',
     d: 'Python, pandas, NumPy and Matplotlib for data work.',
-    ic: '🐍'
+    ic: '🐍',
+    id: ''
   },
 
   {
     t: 'Machine Learning Specialization',
     i: 'Coursera · 2025',
     d: 'Supervised and unsupervised learning, model evaluation and tuning.',
-    ic: '🤖'
+    ic: '🤖',
+    id: ''
   },
 
   {
     t: 'SQL and Relational Databases',
     i: 'FreeCode Camp · 2024',
     d: 'Querying, joins, subqueries and database design with MySQL.',
-    ic: '🗄️'
+    ic: '🗄️',
+    id: ''
   }
 ];
 
@@ -619,7 +628,9 @@ document.querySelectorAll('#certGrid button').forEach(b => {
     $('#dT').textContent = c.t;
     $('#dI').textContent = c.i;
     $('#dD').textContent = c.d;
-    $('#dC').textContent = 'Credential ID: ' + c.id;
+    $('#dC').textContent = c.id
+      ? 'Credential ID: ' + c.id
+      : 'Credential ID not added yet.';
 
     dlg.showModal();
   };
