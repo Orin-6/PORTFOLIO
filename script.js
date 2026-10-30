@@ -504,7 +504,7 @@ const P = [
     c: 'Database',
     d: 'Analyzed credit card transaction data collected from Kaggle. Converted the dataset into Excel format, imported it into MySQL, and performed SQL-based analysis to identify fraudulent transactions, calculate fraud rates, and explore transaction patterns.',
     s: ['MySQL', 'SQL', 'Excel', 'Kaggle'],
-    url: 'https://github.com/Orin-6'
+    url: 'https://github.com/Orin-6/DataBase'
   },
 
   {
