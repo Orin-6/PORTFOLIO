@@ -568,152 +568,110 @@ function render() {
 render();
 
 /* certificates */
+
+/* certificates */
+
 const C = [
   {
-    t: 'Data Analytics Professional',
-    i: 'Ostad · 2026',
-    d: 'Covers data cleaning, analysis, SQL, spreadsheets and visualisation.',
-    ic: '📊',
-    id: ''
-  },
-
-  {
-    t: 'Power BI Data Analyst',
-    i: 'Ostad · 2025',
-    d: 'Data modelling, DAX measures and report design in Power BI.',
-    ic: '📈',
-    id: ''
-  },
-
-  {
-    t: 'Python for Data Science',
-    i: 'FreeCode Camp · 2026',
-    d: 'Python, pandas, NumPy and Matplotlib for data work.',
-    ic: '🐍',
-    id: ''
-  },
-
-  {
-    t: 'Machine Learning Specialization',
-    i: 'Coursera · 2025',
-    d: 'Supervised and unsupervised learning, model evaluation and tuning.',
+    t: 'Machine Learning in Python',
+    i: 'IBM · 2026',
+    d: 'Learned machine learning concepts and practical implementation using Python.',
     ic: '🤖',
-    id: ''
+    id: '',
+    url: 'https://github.com/Orin-6/Certificate/blob/main/Machine%20Learning/IBM_Machine_Learning_in_Python.pdf'
   },
 
   {
-    t: 'SQL and Relational Databases',
-    i: 'FreeCode Camp · 2024',
-    d: 'Querying, joins, subqueries and database design with MySQL.',
-    ic: '🗄️',
-    id: ''
+    t: 'Data Analysis',
+    i: 'Ostad · 2026',
+    d: 'Learned data analysis concepts and practical analytical skills.',
+    ic: '📊',
+    id: '',
+    url: 'https://github.com/Orin-6/Certificate/blob/main/Data%20Analysis/Ostad_Data_Analysis.pdf'
+  },
+
+  {
+    t: 'Python',
+    i: 'freeCodeCamp · 2026',
+    d: 'Learned Python programming fundamentals and practical coding skills.',
+    ic: '🐍',
+    id: '',
+    url: 'https://github.com/Orin-6/Certificate/blob/main/Python/freeCodeCamp_Python.pdf'
   }
 ];
+
+
+/* Render Certificate Cards */
 
 $('#certGrid').innerHTML = C.map((c, n) => `
   <button class="card lift p-5 text-left" data-n="${n}">
     <div class="text-3xl">${c.ic}</div>
+
     <h3 class="font-bold mt-3">${c.t}</h3>
+
     <p class="muted text-sm">${c.i}</p>
-    <p class="acc text-sm mt-3" style="color:var(--a)">View details</p>
+
+    <p class="acc text-sm mt-3" style="color:var(--a)">
+      View details →
+    </p>
   </button>
 `).join('');
+
+
+/* Certificate Details Modal */
 
 const dlg = $('#dlg');
 
 document.querySelectorAll('#certGrid button').forEach(b => {
+
   b.onclick = () => {
-    const c = C[b.dataset.n];
+
+    const c = C[Number(b.dataset.n)];
 
     $('#dT').textContent = c.t;
     $('#dI').textContent = c.i;
     $('#dD').textContent = c.d;
+
     $('#dC').textContent = c.id
       ? 'Credential ID: ' + c.id
-      : 'Credential ID not added yet.';
+      : 'Certificate available on GitHub.';
+
+    $('#dV').textContent = 'View Certificate ↗';
 
     dlg.showModal();
   };
+
 });
 
-$('#dX').onclick = () => dlg.close();
 
-$('#dV').onclick = () => {
-  $('#dC').textContent =
-    'Add your credential link here to enable verification.';
+/* Close Certificate Modal */
+
+$('#dX').onclick = () => {
+  dlg.close();
 };
 
-/* effects */
-document.addEventListener('pointermove', e => {
-  const c = e.target.closest && e.target.closest('.card');
 
-  if (c) {
-    const r = c.getBoundingClientRect();
+/* View Certificate on GitHub */
 
-    c.style.setProperty('--mx', e.clientX - r.left + 'px');
-    c.style.setProperty('--my', e.clientY - r.top + 'px');
+$('#dV').onclick = () => {
+
+  const c = C.find(
+    x => x.t === $('#dT').textContent
+  );
+
+  if (c && c.url) {
+    window.open(
+      c.url,
+      '_blank',
+      'noopener,noreferrer'
+    );
   }
-});
 
-if (!still && matchMedia('(hover:hover)').matches) {
-  document.addEventListener('pointermove', e => {
-    const c = e.target.closest && e.target.closest('.lift');
+};
 
-    document.querySelectorAll('.lift').forEach(l => {
-      if (l !== c) l.style.transform = '';
-    });
 
-    if (c) {
-      const r = c.getBoundingClientRect(),
-        x = (e.clientX - r.left) / r.width - .5,
-        y = (e.clientY - r.top) / r.height - .5;
+/* End of Certificates */
 
-      c.style.transform =
-        `perspective(700px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) translateY(-4px)`;
-    }
-  });
-}
-
-const rev = new IntersectionObserver(es =>
-  es.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('show');
-      rev.unobserve(e.target);
-    }
-  }),
-  { threshold: .12 }
-);
-
-document.querySelectorAll(
-  'section>h2,section>p,.tl,.step,#skills .card,#contact .card'
-).forEach(el => {
-  el.classList.add('reveal');
-  rev.observe(el);
-});
-
-const navL = [...document.querySelectorAll('header nav div a')];
-
-const spy = new IntersectionObserver(es =>
-  es.forEach(e => {
-    if (e.isIntersecting) {
-      navL.forEach(a =>
-        a.classList.toggle(
-          'act',
-          a.getAttribute('href') === '#' + e.target.id
-        )
-      );
-    }
-  }),
-  { rootMargin: '-45% 0px -50% 0px' }
-);
-
-document.querySelectorAll('main>section[id]').forEach(x => {
-  spy.observe(x);
-});
-
-addEventListener('scroll', () => {
-  $('#top2').classList.toggle('on', scrollY > 600);
-});
 
 /* contact */
 $('#send').onclick = () => {
