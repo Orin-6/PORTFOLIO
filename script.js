@@ -569,25 +569,25 @@ render();
 /* certificates */
 const C = [
   {
-    t: 'Machine Learning in Python',
+    t: 'Machine Learning with Python',
     i: 'IBM · 2026',
     d: 'Learned machine learning concepts and practical implementation using Python.',
     ic: '🤖',
-    url: 'https://github.com/Orin-6/Certificate/blob/main/Machine%20Learning/IBM_Machine_Learning_in_Python.pdf'
+    url: 'https://github.com/Orin-6/Certificate/blob/main/IBM%20ML0101EN%20Certificate%20_%20Cognitive%20Class.pdf'
   },
   {
     t: 'Data Analysis',
     i: 'Ostad · 2026',
     d: 'Learned data analysis concepts and practical analytical skills.',
     ic: '📊',
-    url: 'https://github.com/Orin-6/Certificate/blob/main/Data%20Analysis/Ostad_Data_Analysis.pdf'
+    url: 'https://github.com/Orin-6/Certificate/blob/main/Miss.%20Rabyea%20Sultana-Data%20Analytics%20Job%20Ready%20Program%2016-C47138%20(1).pdf'
   },
   {
     t: 'Python',
     i: 'freeCodeCamp · 2026',
     d: 'Learned Python programming fundamentals and practical coding skills.',
     ic: '🐍',
-    url: 'https://github.com/Orin-6/Certificate/blob/main/Python/freeCodeCamp_Python.pdf'
+    url: 'https://github.com/Orin-6/Certificate/blob/main/freecodecamp.org_certification_fcc-3ee18b88-62a7-42e3-8f72-0a2338c38b33_python-v9.pdf'
   }
 ];
 
