@@ -569,15 +569,12 @@ render();
 
 /* certificates */
 
-/* certificates */
-
 const C = [
   {
     t: 'Machine Learning in Python',
     i: 'IBM · 2026',
     d: 'Learned machine learning concepts and practical implementation using Python.',
     ic: '🤖',
-    id: '',
     url: 'https://github.com/Orin-6/Certificate/blob/main/Machine%20Learning/IBM_Machine_Learning_in_Python.pdf'
   },
 
@@ -586,7 +583,6 @@ const C = [
     i: 'Ostad · 2026',
     d: 'Learned data analysis concepts and practical analytical skills.',
     ic: '📊',
-    id: '',
     url: 'https://github.com/Orin-6/Certificate/blob/main/Data%20Analysis/Ostad_Data_Analysis.pdf'
   },
 
@@ -595,7 +591,6 @@ const C = [
     i: 'freeCodeCamp · 2026',
     d: 'Learned Python programming fundamentals and practical coding skills.',
     ic: '🐍',
-    id: '',
     url: 'https://github.com/Orin-6/Certificate/blob/main/Python/freeCodeCamp_Python.pdf'
   }
 ];
