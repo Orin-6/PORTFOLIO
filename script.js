@@ -1,4 +1,3 @@
-
 const $ = s => document.querySelector(s),
   css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim(),
   root = document.documentElement;
@@ -568,7 +567,6 @@ function render() {
 render();
 
 /* certificates */
-
 const C = [
   {
     t: 'Machine Learning in Python',
@@ -577,7 +575,6 @@ const C = [
     ic: '🤖',
     url: 'https://github.com/Orin-6/Certificate/blob/main/Machine%20Learning/IBM_Machine_Learning_in_Python.pdf'
   },
-
   {
     t: 'Data Analysis',
     i: 'Ostad · 2026',
@@ -585,7 +582,6 @@ const C = [
     ic: '📊',
     url: 'https://github.com/Orin-6/Certificate/blob/main/Data%20Analysis/Ostad_Data_Analysis.pdf'
   },
-
   {
     t: 'Python',
     i: 'freeCodeCamp · 2026',
@@ -595,78 +591,48 @@ const C = [
   }
 ];
 
-
-/* Render Certificate Cards */
-
+/* render cards */
 $('#certGrid').innerHTML = C.map((c, n) => `
-  <button class="card lift p-5 text-left" data-n="${n}">
+  <button type="button" class="card lift p-5 text-left" data-n="${n}">
     <div class="text-3xl">${c.ic}</div>
-
     <h3 class="font-bold mt-3">${c.t}</h3>
-
     <p class="muted text-sm">${c.i}</p>
-
-    <p class="acc text-sm mt-3" style="color:var(--a)">
-      View details →
-    </p>
+    <p class="acc text-sm mt-3" style="color:var(--a)">View details →</p>
   </button>
 `).join('');
 
-
-/* Certificate Details Modal */
-
+/* modal */
 const dlg = $('#dlg');
+let activeCert = null;
 
 document.querySelectorAll('#certGrid button').forEach(b => {
-
   b.onclick = () => {
+    activeCert = C[Number(b.dataset.n)];
 
-    const c = C[Number(b.dataset.n)];
-
-    $('#dT').textContent = c.t;
-    $('#dI').textContent = c.i;
-    $('#dD').textContent = c.d;
-
-    $('#dC').textContent = c.id
-      ? 'Credential ID: ' + c.id
-      : 'Certificate available on GitHub.';
-
-    $('#dV').textContent = 'View Certificate ↗';
+    $('#dT').textContent = activeCert.t;
+    $('#dI').textContent = activeCert.i;
+    $('#dD').textContent = activeCert.d;
+    $('#dC').textContent = 'Certificate available on GitHub.';
+    $('#dV').textContent = 'View Certificate on GitHub ↗';
 
     dlg.showModal();
   };
-
 });
 
+$('#dX').onclick = () => dlg.close();
 
-/* Close Certificate Modal */
+/* click outside the modal to close */
+dlg.addEventListener('click', e => {
+  if (e.target === dlg) dlg.close();
+});
 
-$('#dX').onclick = () => {
-  dlg.close();
-};
-
-
-/* View Certificate on GitHub */
-
+/* open certificate on GitHub in a new tab */
 $('#dV').onclick = () => {
-
-  const c = C.find(
-    x => x.t === $('#dT').textContent
-  );
-
-  if (c && c.url) {
-    window.open(
-      c.url,
-      '_blank',
-      'noopener,noreferrer'
-    );
+  if (activeCert && activeCert.url) {
+    window.open(activeCert.url, '_blank', 'noopener,noreferrer');
   }
-
 };
-
-
 /* End of Certificates */
-
 
 /* contact */
 $('#send').onclick = () => {
