@@ -1,4 +1,4 @@
-give me full code-- const $ = s => document.querySelector(s),
+const $ = s => document.querySelector(s),
   css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim(),
   root = document.documentElement;
 
@@ -506,21 +506,21 @@ const P = [
     url: 'https://github.com/Orin-6/DataBase'
   },
 
- {
-  t: 'Telco-Customer-Churn',
-  c: 'Data Analysis',
-  d: 'Reusable pandas functions that fix types, duplicates, outliers and missing values.',
-  s: ['Pandas', 'NumPy', 'Kaggle'],
-  url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
-},
+  {
+    t: 'Telco Customer Churn Analysis',
+    c: 'Data Analysis',
+    d: 'Analyzed telecom customer data to understand why customers leave, comparing churn across contract type, tenure and charges, and presenting the findings in a dashboard.',
+    s: ['Power BI', 'Data Analysis', 'Kaggle'],
+    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
+  },
 
-{
-  t: 'Fraud Analysis',
-  c: 'Data Analysis',
-  d: 'This project focuses on exploratory analysis and dashboard-based monitoring. It is not a production fraud detection system or a trained machine learning model.',
-  s: ['Excel', 'SQL', 'Tableau'],
-  url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
-   }
+  {
+    t: 'Fraud Analysis Dashboard',
+    c: 'Data Analysis',
+    d: 'Interactive Tableau dashboard built on top of SQL analysis, showing fraud rate, fraud amount, fraud by category and monthly fraud trends with date, category and fraud-status filters.',
+    s: ['Excel', 'SQL', 'Tableau'],
+    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
+  }
 ];
 
 const cats = ['All', ...new Set(P.map(p => p.c))];
