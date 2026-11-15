@@ -507,17 +507,19 @@ const P = [
   },
 
   {
-    t: 'Data cleaning toolkit',
+    t: 'Telco-Customer-Churn',
     c: 'Data Analysis',
     d: 'Reusable pandas functions that fix types, duplicates, outliers and missing values.',
-    s: ['Pandas', 'NumPy', 'GitHub']
+    s: ['Pandas', 'NumPy', 'Kaggle']
+    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
   },
 
   {
-    t: 'Exploratory data analysis',
+    t: 'Fraud Analysis',
     c: 'Data Analysis',
-    d: 'End-to-end EDA notebook with charts and a written summary of findings.',
-    s: ['Matplotlib', 'Jupyter', 'Excel']
+    d: 'This project focuses on exploratory analysis and dashboard-based monitoring. It is not a production fraud detection system or a trained machine learning model.',
+    s: ['Excel', 'SQL', 'Tableau']
+    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
   }
 ];
 
