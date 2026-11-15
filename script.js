@@ -1,525 +1,125 @@
 const $ = s => document.querySelector(s),
   css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim(),
   root = document.documentElement;
-
 $('#yr').textContent = new Date().getFullYear();
 
 /* photo, progress, glow */
-const PHOTO = 'orin.jpg';
-
-if (PHOTO) {
-  $('#photoImg').src = PHOTO;
-  $('#photoImg').hidden = false;
-}
-
-addEventListener('scroll', () => {
-  const total = document.body.scrollHeight - innerHeight;
-  $('#prog').style.width = (total > 0 ? scrollY / total * 100 : 0) + '%';
-});
-
+const PHOTO = 'orin.jpg'; // photo change korte chaile ei nam-er file ta replace korun (ba URL din)
+if (PHOTO) { $('#photoImg').src = PHOTO; $('#photoImg').hidden = false }
+addEventListener('scroll', () => { $('#prog').style.width = scrollY / (document.body.scrollHeight - innerHeight) * 100 + '%' });
 if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
-  addEventListener('pointermove', e => {
-    $('#glow').style.left = e.clientX + 'px';
-    $('#glow').style.top = e.clientY + 'px';
-  });
+  addEventListener('pointermove', e => { $('#glow').style.left = e.clientX + 'px'; $('#glow').style.top = e.clientY + 'px' });
 }
 
 /* typing + counters */
-const words = ['patterns.', 'insights.', 'forecasts.', 'answers.'];
-let wi = 0, ci = 0, del = false;
-
-(function type() {
-  const w = words[wi];
-  $('#typed').textContent = w.slice(0, ci);
-
-  if (!del && ci === w.length) {
-    del = true;
-    return setTimeout(type, 1400);
-  }
-
-  if (del && ci === 0) {
-    del = false;
-    wi = (wi + 1) % words.length;
-  }
-
-  ci += del ? -1 : 1;
-  setTimeout(type, del ? 40 : 80);
-})();
-
-document.querySelectorAll('[data-count]').forEach(el => {
-  const n = +el.dataset.count;
-  let i = 0;
-
-  const id = setInterval(() => {
-    i = Math.min(n, i + Math.max(1, Math.ceil(n / 30)));
-    el.textContent = i + '+';
-
-    if (i >= n) clearInterval(id);
-  }, 40);
-});
+const words = ['patterns.', 'insights.', 'forecasts.', 'answers.']; let wi = 0, ci = 0, del = false;
+(function type() { const w = words[wi]; $('#typed').textContent = w.slice(0, ci); if (!del && ci === w.length) { del = true; return setTimeout(type, 1400) } if (del && ci === 0) { del = false; wi = (wi + 1) % words.length } ci += del ? -1 : 1; setTimeout(type, del ? 40 : 80) })();
+document.querySelectorAll('[data-count]').forEach(el => { const n = +el.dataset.count; let i = 0; const id = setInterval(() => { i = Math.min(n, i + Math.max(1, Math.ceil(n / 30))); el.textContent = i + '+'; if (i >= n) clearInterval(id) }, 40) });
 
 /* neural-network background */
-const nc = $('#net'), nx = nc.getContext('2d');
-let nodes = [], mouse = { x: -999, y: -999 };
-
-function nsize() {
-  const r = nc.getBoundingClientRect(), d = devicePixelRatio || 1;
-
-  nc.width = r.width * d;
-  nc.height = r.height * d;
-  nx.setTransform(d, 0, 0, d, 0, 0);
-
-  nodes = Array.from(
-    { length: Math.round(r.width / 16) },
-    () => ({
-      x: Math.random() * r.width,
-      y: Math.random() * r.height,
-      vx: (Math.random() - .5) * .4,
-      vy: (Math.random() - .5) * .4
-    })
-  );
-}
-
-nc.parentElement.addEventListener('pointermove', e => {
-  const r = nc.getBoundingClientRect();
-
-  mouse = {
-    x: e.clientX - r.left,
-    y: e.clientY - r.top
-  };
-});
-
+const nc = $('#net'), nx = nc.getContext('2d'); let nodes = [], mouse = { x: -999, y: -999 };
+function nsize() { const r = nc.getBoundingClientRect(), d = devicePixelRatio || 1; nc.width = r.width * d; nc.height = r.height * d; nx.setTransform(d, 0, 0, d, 0, 0); nodes = Array.from({ length: Math.round(r.width / 16) }, () => ({ x: Math.random() * r.width, y: Math.random() * r.height, vx: (Math.random() - .5) * .4, vy: (Math.random() - .5) * .4 })) }
+nc.parentElement.addEventListener('pointermove', e => { const r = nc.getBoundingClientRect(); mouse = { x: e.clientX - r.left, y: e.clientY - r.top } });
 const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
-
 (function loop() {
-  const r = nc.getBoundingClientRect();
-  nx.clearRect(0, 0, r.width, r.height);
-
+  const r = nc.getBoundingClientRect(); nx.clearRect(0, 0, r.width, r.height);
   nodes.forEach((p, i) => {
-    if (!still) {
-      p.x += p.vx;
-      p.y += p.vy;
-
-      if (p.x < 0 || p.x > r.width) p.vx *= -1;
-      if (p.y < 0 || p.y > r.height) p.vy *= -1;
-    }
-
-    nx.fillStyle = css('--b');
-    nx.beginPath();
-    nx.arc(p.x, p.y, 1.8, 0, 7);
-    nx.fill();
-
-    for (let j = i + 1; j < nodes.length; j++) {
-      const q = nodes[j],
-        d = Math.hypot(p.x - q.x, p.y - q.y);
-
-      if (d < 90) {
-        nx.strokeStyle = css('--a');
-        nx.globalAlpha = 1 - d / 90;
-        nx.beginPath();
-        nx.moveTo(p.x, p.y);
-        nx.lineTo(q.x, q.y);
-        nx.stroke();
-        nx.globalAlpha = 1;
-      }
-    }
-
-    const dm = Math.hypot(p.x - mouse.x, p.y - mouse.y);
-
-    if (dm < 130) {
-      nx.strokeStyle = css('--c');
-      nx.globalAlpha = 1 - dm / 130;
-      nx.beginPath();
-      nx.moveTo(p.x, p.y);
-      nx.lineTo(mouse.x, mouse.y);
-      nx.stroke();
-      nx.globalAlpha = 1;
-    }
+    if (!still) { p.x += p.vx; p.y += p.vy; if (p.x < 0 || p.x > r.width) p.vx *= -1; if (p.y < 0 || p.y > r.height) p.vy *= -1 }
+    nx.fillStyle = css('--b'); nx.beginPath(); nx.arc(p.x, p.y, 1.8, 0, 7); nx.fill();
+    for (let j = i + 1; j < nodes.length; j++) { const q = nodes[j], d = Math.hypot(p.x - q.x, p.y - q.y); if (d < 90) { nx.strokeStyle = css('--a'); nx.globalAlpha = 1 - d / 90; nx.beginPath(); nx.moveTo(p.x, p.y); nx.lineTo(q.x, q.y); nx.stroke(); nx.globalAlpha = 1 } }
+    const dm = Math.hypot(p.x - mouse.x, p.y - mouse.y); if (dm < 130) { nx.strokeStyle = css('--c'); nx.globalAlpha = 1 - dm / 130; nx.beginPath(); nx.moveTo(p.x, p.y); nx.lineTo(mouse.x, mouse.y); nx.stroke(); nx.globalAlpha = 1 }
   });
-
-  requestAnimationFrame(loop);
+  requestAnimationFrame(loop)
 })();
 
 /* regression playground */
-const cv = $('#reg'), cx = cv.getContext('2d');
-let pts = [], W, H, line = null, raf;
-
-function size() {
-  const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
-
-  cv.width = r.width * d;
-  cv.height = r.height * d;
-  cx.setTransform(d, 0, 0, d, 0, 0);
-
-  W = r.width;
-  H = r.height;
-
-  draw();
-  nsize();
-}
-
-function seed() {
-  pts = [];
-
-  const m = .4 + Math.random() * .5,
-    b = .1 + Math.random() * .2;
-
-  for (let i = 0; i < 22; i++) {
-    const x = .05 + Math.random() * .9;
-
-    pts.push([
-      x,
-      Math.min(.97, Math.max(.03, m * x + b + (Math.random() - .5) * .22))
-    ]);
-  }
-
-  line = null;
-}
-
+const cv = $('#reg'), cx = cv.getContext('2d'); let pts = [], W, H, line = null, raf;
+function size() { const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1; cv.width = r.width * d; cv.height = r.height * d; cx.setTransform(d, 0, 0, d, 0, 0); W = r.width; H = r.height; draw(); nsize() }
+function seed() { pts = []; const m = .4 + Math.random() * .5, b = .1 + Math.random() * .2; for (let i = 0; i < 22; i++) { const x = .05 + Math.random() * .9; pts.push([x, Math.min(.97, Math.max(.03, m * x + b + (Math.random() - .5) * .22))]) } line = null }
 function fit() {
-  const n = pts.length;
-
-  if (n < 2) {
-    ['m', 'b', 'r2', 'mse'].forEach(k => {
-      $('#' + k).textContent = '–';
-    });
-    return null;
-  }
-
-  const mx = pts.reduce((a, p) => a + p[0], 0) / n,
-    my = pts.reduce((a, p) => a + p[1], 0) / n;
-
-  let sxy = 0, sxx = 0;
-
-  pts.forEach(p => {
-    sxy += (p[0] - mx) * (p[1] - my);
-    sxx += (p[0] - mx) ** 2;
-  });
-
-  const m = sxx ? sxy / sxx : 0,
-    b = my - m * mx;
-
-  stats(m, b);
-  return { m, b };
+  const n = pts.length; if (n < 2) { ['m', 'b', 'r2', 'mse'].forEach(k => $('#' + k).textContent = '–'); return null }
+  const mx = pts.reduce((a, p) => a + p[0], 0) / n, my = pts.reduce((a, p) => a + p[1], 0) / n; let sxy = 0, sxx = 0; pts.forEach(p => { sxy += (p[0] - mx) * (p[1] - my); sxx += (p[0] - mx) ** 2 });
+  const m = sxx ? sxy / sxx : 0, b = my - m * mx; stats(m, b); return { m, b }
 }
-
 function stats(m, b) {
-  const n = pts.length,
-    my = pts.reduce((a, p) => a + p[1], 0) / n,
-    sse = pts.reduce((a, p) => a + (p[1] - (m * p[0] + b)) ** 2, 0),
-    sst = pts.reduce((a, p) => a + (p[1] - my) ** 2, 0);
-
-  $('#m').textContent = m.toFixed(3);
-  $('#b').textContent = b.toFixed(3);
-  $('#r2').textContent = sst ? (1 - sse / sst).toFixed(3) : '–';
-  $('#mse').textContent = (sse / n).toFixed(4);
+  const n = pts.length, my = pts.reduce((a, p) => a + p[1], 0) / n, sse = pts.reduce((a, p) => a + (p[1] - (m * p[0] + b)) ** 2, 0), sst = pts.reduce((a, p) => a + (p[1] - my) ** 2, 0);
+  $('#m').textContent = m.toFixed(3); $('#b').textContent = b.toFixed(3); $('#r2').textContent = sst ? (1 - sse / sst).toFixed(3) : '–'; $('#mse').textContent = (sse / n).toFixed(4)
 }
-
 function draw() {
-  if (!W) return;
-
-  cx.clearRect(0, 0, W, H);
-  cx.strokeStyle = css('--line');
-
-  for (let i = 1; i < 5; i++) {
-    cx.beginPath();
-    cx.moveTo(0, H * i / 5);
-    cx.lineTo(W, H * i / 5);
-    cx.stroke();
-  }
-
-  const L = line || fit();
-
-  if (L) {
-    cx.strokeStyle = css('--a');
-    cx.lineWidth = 2.5;
-    cx.beginPath();
-    cx.moveTo(0, H - L.b * H);
-    cx.lineTo(W, H - (L.m + L.b) * H);
-    cx.stroke();
-  }
-
-  cx.fillStyle = css('--c');
-
-  pts.forEach(p => {
-    cx.beginPath();
-    cx.arc(p[0] * W, H - p[1] * H, 5, 0, 7);
-    cx.fill();
-  });
+  if (!W) return; cx.clearRect(0, 0, W, H); cx.strokeStyle = css('--line'); for (let i = 1; i < 5; i++) { cx.beginPath(); cx.moveTo(0, H * i / 5); cx.lineTo(W, H * i / 5); cx.stroke() }
+  const L = line || fit(); if (L) { cx.strokeStyle = css('--a'); cx.lineWidth = 2.5; cx.beginPath(); cx.moveTo(0, H - L.b * H); cx.lineTo(W, H - (L.m + L.b) * H); cx.stroke() }
+  cx.fillStyle = css('--c'); pts.forEach(p => { cx.beginPath(); cx.arc(p[0] * W, H - p[1] * H, 5, 0, 7); cx.fill() })
 }
-
-cv.addEventListener('pointerdown', e => {
-  cancelAnimationFrame(raf);
-
-  const r = cv.getBoundingClientRect();
-
-  pts.push([
-    (e.clientX - r.left) / r.width,
-    1 - (e.clientY - r.top) / r.height
-  ]);
-
-  line = null;
-  $('#epoch').textContent = '';
-  draw();
-});
-
-$('#reset').onclick = () => {
-  cancelAnimationFrame(raf);
-  seed();
-  $('#epoch').textContent = '';
-  draw();
-};
-
-$('#clear').onclick = () => {
-  cancelAnimationFrame(raf);
-  pts = [];
-  line = null;
-  $('#epoch').textContent = '';
-  draw();
-};
-
+cv.addEventListener('pointerdown', e => { cancelAnimationFrame(raf); const r = cv.getBoundingClientRect(); pts.push([(e.clientX - r.left) / r.width, 1 - (e.clientY - r.top) / r.height]); line = null; $('#epoch').textContent = ''; draw() });
+$('#reset').onclick = () => { cancelAnimationFrame(raf); seed(); $('#epoch').textContent = ''; draw() };
+$('#clear').onclick = () => { cancelAnimationFrame(raf); pts = []; line = null; $('#epoch').textContent = ''; draw() };
 $('#train').onclick = () => {
-  if (pts.length < 2) {
-    $('#epoch').textContent = 'Add at least 2 points first.';
-    return;
-  }
-
-  cancelAnimationFrame(raf);
-
-  let m = Math.random() * 2 - 1,
-    b = Math.random(),
-    ep = 0;
-
-  const lr = .3,
-    n = pts.length,
-    t = (line = null, fit());
-
+  if (pts.length < 2) { $('#epoch').textContent = 'Add at least 2 points first.'; return } cancelAnimationFrame(raf);
+  let m = Math.random() * 2 - 1, b = Math.random(), ep = 0; const lr = .3, n = pts.length, t = (line = null, fit());
   (function step() {
-    for (let k = 0; k < 4; k++) {
-      let gm = 0, gb = 0;
-
-      pts.forEach(p => {
-        const e = m * p[0] + b - p[1];
-        gm += e * p[0];
-        gb += e;
-      });
-
-      m -= lr * 2 * gm / n;
-      b -= lr * 2 * gb / n;
-      ep++;
-    }
-
-    line = { m, b };
-    stats(m, b);
-    draw();
-
-    $('#epoch').textContent =
-      `Epoch ${ep}: the line is descending toward the least-squares fit.`;
-
-    if (
-      ep < 400 &&
-      (Math.abs(m - t.m) > .002 || Math.abs(b - t.b) > .002)
-    ) {
-      raf = requestAnimationFrame(step);
-    } else {
-      $('#epoch').textContent = `Converged after ${ep} epochs.`;
-    }
-  })();
+    for (let k = 0; k < 4; k++) { let gm = 0, gb = 0; pts.forEach(p => { const e = m * p[0] + b - p[1]; gm += e * p[0]; gb += e }); m -= lr * 2 * gm / n; b -= lr * 2 * gb / n; ep++ }
+    line = { m, b }; stats(m, b); draw(); $('#epoch').textContent = `Epoch ${ep}: the line is descending toward the least-squares fit.`;
+    if (ep < 400 && (Math.abs(m - t.m) > .002 || Math.abs(b - t.b) > .002)) raf = requestAnimationFrame(step); else $('#epoch').textContent = `Converged after ${ep} epochs.`
+  })()
 };
-
-addEventListener('resize', size);
-seed();
-size();
+addEventListener('resize', size); seed(); size();
 
 /* skills */
 const S = {
-  'Programming': [
-    ['Python', 92],
-    ['C', 72],
-    ['C++', 74],
-    ['Java', 70],
-    ['JavaScript', 76]
-  ],
-
-  'Data & Analytics': [
-    ['Data Analysis', 92],
-    ['Data Cleaning', 94],
-    ['Data Visualization', 90],
-    ['Excel', 88],
-    ['Pandas', 93],
-    ['NumPy', 88],
-    ['Matplotlib', 86]
-  ],
-
-  'Database': [
-    ['SQL', 90],
-    ['MySQL', 88]
-  ],
-
-  'Machine Learning': [
-    ['Machine Learning', 85]
-  ],
-
-  'Business Intelligence': [
-    ['Power BI', 90],
-    ['DAX', 82],
-    ['Power Query', 86]
-  ],
-
-  'Tools & Platforms': [
-    ['Git', 85],
-    ['GitHub', 88],
-    ['Jupyter Notebook', 94]
-  ],
-
-  'Soft Skills': [
-    'Problem Solving',
-    'Analytical Thinking',
-    'Research',
-    'Communication',
-    'Teamwork',
-    'Time Management',
-    'Presentation',
-    'Self-Learning'
-  ]
+  'Programming': [['Python', 92], ['C', 72], ['C++', 74], ['Java', 70], ['JavaScript', 76]],
+  'Data & Analytics': [['Data Analysis', 92], ['Data Cleaning', 94], ['Data Visualization', 90], ['Excel', 88], ['Pandas', 93], ['NumPy', 88], ['Matplotlib', 86]],
+  'Database': [['SQL', 90], ['MySQL', 88]],
+  'Machine Learning': [['Machine Learning', 85]],
+  'Business Intelligence': [['Power BI', 90], ['DAX', 82], ['Power Query', 86]],
+  'Tools & Platforms': [['Git', 85], ['GitHub', 88], ['Jupyter Notebook', 94]],
+  'Soft Skills': ['Problem Solving', 'Analytical Thinking', 'Research', 'Communication', 'Teamwork', 'Time Management', 'Presentation', 'Self-Learning']
 };
-
-const keys = Object.keys(S);
-let cat = keys[0];
-
+const keys = Object.keys(S); let cat = keys[0];
 function skills() {
-  $('#skTabs').innerHTML = keys.map(k =>
-    `<button role="tab" class="chip ${k === cat ? 'on' : ''}" data-k="${k}">${k}</button>`
-  ).join('');
-
-  const v = S[cat];
-
-  $('#skBody').innerHTML = Array.isArray(v[0])
-    ? v.map(s => `
-      <div>
-        <div class="flex justify-between text-sm mb-1">
-          <span>${s[0]}</span>
-          <span class="muted">${s[1]}%</span>
-        </div>
-        <div class="bar"><i data-w="${s[1]}"></i></div>
-      </div>
-    `).join('')
-    : `
-      <div class="sm:col-span-2 flex flex-wrap gap-2">
-        ${v.map(s => `<span class="tag" style="font-size:.9rem;padding:.3rem .8rem">${s}</span>`).join('')}
-      </div>
-    `;
-
-  requestAnimationFrame(() =>
-    requestAnimationFrame(() =>
-      document.querySelectorAll('#skBody i').forEach(i => {
-        i.style.width = i.dataset.w + '%';
-      })
-    )
-  );
-
-  document.querySelectorAll('#skTabs .chip').forEach(b => {
-    b.onclick = () => {
-      cat = b.dataset.k;
-      skills();
-    };
-  });
+  $('#skTabs').innerHTML = keys.map(k => `<button role="tab" class="chip ${k === cat ? 'on' : ''}" data-k="${k}">${k}</button>`).join('');
+  const v = S[cat]; $('#skBody').innerHTML = Array.isArray(v[0]) ? v.map(s => `<div><div class="flex justify-between text-sm mb-1"><span>${s[0]}</span><span class="muted">${s[1]}%</span></div><div class="bar"><i data-w="${s[1]}"></i></div></div>`).join('') : `<div class="sm:col-span-2 flex flex-wrap gap-2">${v.map(s => `<span class="tag" style="font-size:.9rem;padding:.3rem .8rem">${s}</span>`).join('')}</div>`;
+  requestAnimationFrame(() => requestAnimationFrame(() => document.querySelectorAll('#skBody i').forEach(i => i.style.width = i.dataset.w + '%')));
+  document.querySelectorAll('#skTabs .chip').forEach(b => b.onclick = () => { cat = b.dataset.k; skills() })
 }
-
 skills();
-
-let radar;
-
-function buildRadar() {
-  if (radar) radar.destroy();
-
-  const avg = k =>
-    Array.isArray(S[k][0])
-      ? Math.round(S[k].reduce((a, s) => a + s[1], 0) / S[k].length)
-      : 85;
-
+let radar; function buildRadar() {
+  if (radar) radar.destroy(); const avg = k => Array.isArray(S[k][0]) ? Math.round(S[k].reduce((a, s) => a + s[1], 0) / S[k].length) : 85;
   radar = new Chart($('#radar'), {
-    type: 'radar',
-
-    data: {
-      labels: keys.map(k => k.replace(' & ', ' &\n')),
-      datasets: [{
-        data: keys.map(avg),
-        borderColor: css('--a'),
-        backgroundColor: css('--a') + '33',
-        pointBackgroundColor: css('--b')
-      }]
-    },
-
-    options: {
-      plugins: {
-        legend: { display: false }
-      },
-
-      scales: {
-        r: {
-          min: 50,
-          max: 100,
-          ticks: { display: false },
-          grid: { color: css('--line') },
-          angleLines: { color: css('--line') },
-          pointLabels: {
-            color: css('--ink'),
-            font: { size: 11 }
-          }
-        }
-      }
-    }
-  });
+    type: 'radar', data: { labels: keys.map(k => k.replace(' & ', ' &\n')), datasets: [{ data: keys.map(avg), borderColor: css('--a'), backgroundColor: css('--a') + '33', pointBackgroundColor: css('--b') }] },
+    options: { plugins: { legend: { display: false } }, scales: { r: { min: 50, max: 100, ticks: { display: false }, grid: { color: css('--line') }, angleLines: { color: css('--line') }, pointLabels: { color: css('--ink'), font: { size: 11 } } } } }
+  })
 }
-
 buildRadar();
 
 /* projects */
+/* projects */
 const P = [
   {
-    t: 'Customer churn predictor',
-    c: 'Machine Learning',
-    d: 'Classification model in scikit-learn that flags customers likely to leave, with feature importance.',
-    s: ['Python', 'Pandas', 'Jupyter']
-  },
-
-  {
-    t: 'Sales forecasting',
-    c: 'Machine Learning',
-    d: 'Time-series model on monthly sales, compared against a naive baseline.',
-    s: ['Python', 'NumPy', 'Matplotlib']
-  },
-
-  {
-    t: 'Executive KPI dashboard',
-    c: 'Business Intelligence',
-    d: 'Power BI report with DAX measures and Power Query transforms over 1M+ rows.',
-    s: ['Power BI', 'DAX', 'Power Query']
-  },
-
-  {
-    t: 'Credit Card Fraud Analysis',
-    c: 'Database',
-    d: 'Analyzed credit card transaction data collected from Kaggle. Converted the dataset into Excel format, imported it into MySQL, and performed SQL-based analysis to identify fraudulent transactions, calculate fraud rates, and explore transaction patterns.',
-    s: ['MySQL', 'SQL', 'Excel', 'Kaggle'],
-    url: 'https://github.com/Orin-6/DataBase'
-  },
-
-  {
-    t: 'Telco Customer Churn Analysis',
+    t: 'Telecom Customer Churn Analysis',
     c: 'Data Analysis',
-    d: 'Analyzed telecom customer data to understand why customers leave, comparing churn across contract type, tenure and charges, and presenting the findings in a dashboard.',
-    s: ['Power BI', 'Data Analysis', 'Kaggle'],
+    d: 'Analyzed telecom customer churn, retention patterns and revenue risk using data cleaning, feature engineering and exploratory data analysis.',
+    s: ['Python', 'Pandas', 'NumPy', 'Power BI'],
     url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
   },
-
   {
-    t: 'Fraud Analysis Dashboard',
+    t: 'Fraud Analysis',
     c: 'Data Analysis',
-    d: 'Interactive Tableau dashboard built on top of SQL analysis, showing fraud rate, fraud amount, fraud by category and monthly fraud trends with date, category and fraud-status filters.',
-    s: ['Excel', 'SQL', 'Tableau'],
+    d: 'Analyzed credit card transaction data to identify fraud patterns, transaction trends and risk indicators using SQL, Excel and Tableau.',
+    s: ['MySQL', 'SQL', 'Excel', 'Tableau'],
     url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
+  },
+  {
+    t: 'Executive KPI Dashboard',
+    c: 'Business Intelligence',
+    d: 'Interactive Power BI dashboard featuring KPI measures, data visualization and business performance insights.',
+    s: ['Power BI', 'DAX', 'Power Query']
+  },
+  {
+    t: 'E-commerce SQL Analysis',
+    c: 'Database',
+    d: 'Analyzed e-commerce data using MySQL queries, joins, aggregations, views and other SQL techniques.',
+    s: ['SQL', 'MySQL', 'Database'],
+    url: 'https://github.com/Orin-6/DataBase'
   }
 ];
 
@@ -546,14 +146,15 @@ function render() {
         </div>
 
         ${p.url ? `
-          <div class="mt-5">
-            <a href="${p.url}"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="btn pri inline-block text-sm">
-               View on GitHub ↗
-            </a>
-          </div>
+          <a
+            href="${p.url}"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="acc text-sm mt-4 inline-block"
+            style="color:var(--a)"
+          >
+            View Project ↗
+          </a>
         ` : ''}
       </article>
     `).join('');
@@ -574,6 +175,7 @@ const C = [
     t: 'Machine Learning with Python',
     i: 'IBM · 2026',
     d: 'Learned machine learning concepts and practical implementation using Python.',
+    id: 'IBM ML0101EN',
     ic: '🤖',
     url: 'https://github.com/Orin-6/Certificate/blob/main/IBM%20ML0101EN%20Certificate%20_%20Cognitive%20Class.pdf'
   },
@@ -581,6 +183,7 @@ const C = [
     t: 'Data Analysis',
     i: 'Ostad · 2026',
     d: 'Learned data analysis concepts and practical analytical skills.',
+    id: 'C47138',
     ic: '📊',
     url: 'https://github.com/Orin-6/Certificate/blob/main/Miss.%20Rabyea%20Sultana-Data%20Analytics%20Job%20Ready%20Program%2016-C47138%20(1).pdf'
   },
@@ -588,72 +191,49 @@ const C = [
     t: 'Python',
     i: 'freeCodeCamp · 2026',
     d: 'Learned Python programming fundamentals and practical coding skills.',
+    id: 'freeCodeCamp Python',
     ic: '🐍',
     url: 'https://github.com/Orin-6/Certificate/blob/main/freecodecamp.org_certification_fcc-3ee18b88-62a7-42e3-8f72-0a2338c38b33_python-v9.pdf'
   }
 ];
 
-/* render cards */
-$('#certGrid').innerHTML = C.map((c, n) => `
-  <button type="button" class="card lift p-5 text-left" data-n="${n}">
-    <div class="text-3xl">${c.ic}</div>
-    <h3 class="font-bold mt-3">${c.t}</h3>
-    <p class="muted text-sm">${c.i}</p>
-    <p class="acc text-sm mt-3" style="color:var(--a)">View details →</p>
-  </button>
-`).join('');
+$('#certGrid').innerHTML = C.map((c, n) => `<button class="card lift p-5 text-left" data-n="${n}"><div class="text-3xl">${c.ic}</div><h3 class="font-bold mt-3">${c.t}</h3><p class="muted text-sm">${c.i}</p><p class="acc text-sm mt-3" style="color:var(--a)">View details</p></button>`).join('');
 
-/* modal */
 const dlg = $('#dlg');
-let activeCert = null;
 
-document.querySelectorAll('#certGrid button').forEach(b => {
-  b.onclick = () => {
-    activeCert = C[Number(b.dataset.n)];
-
-    $('#dT').textContent = activeCert.t;
-    $('#dI').textContent = activeCert.i;
-    $('#dD').textContent = activeCert.d;
-    $('#dC').textContent = 'Certificate available on GitHub.';
-    $('#dV').textContent = 'View Certificate on GitHub ↗';
-
-    dlg.showModal();
-  };
+document.querySelectorAll('#certGrid button').forEach(b => b.onclick = () => {
+  const c = C[b.dataset.n];
+  $('#dT').textContent = c.t;
+  $('#dI').textContent = c.i;
+  $('#dD').textContent = c.d;
+  $('#dC').textContent = 'Credential ID: ' + c.id;
+  dlg.showModal();
 });
 
 $('#dX').onclick = () => dlg.close();
 
-/* click outside the modal to close */
-dlg.addEventListener('click', e => {
-  if (e.target === dlg) dlg.close();
-});
-
-/* open certificate on GitHub in a new tab */
 $('#dV').onclick = () => {
-  if (activeCert && activeCert.url) {
-    window.open(activeCert.url, '_blank', 'noopener,noreferrer');
-  }
+  const c = C.find(cert => cert.t === $('#dT').textContent);
+  if (c?.url) window.open(c.url, '_blank', 'noopener,noreferrer');
 };
-/* End of Certificates */
+/* effects */
+document.addEventListener('pointermove', e => { const c = e.target.closest && e.target.closest('.card'); if (c) { const r = c.getBoundingClientRect(); c.style.setProperty('--mx', e.clientX - r.left + 'px'); c.style.setProperty('--my', e.clientY - r.top + 'px') } });
+if (!still && matchMedia('(hover:hover)').matches) {
+  document.addEventListener('pointermove', e => {
+    const c = e.target.closest && e.target.closest('.lift'); document.querySelectorAll('.lift').forEach(l => { if (l !== c) l.style.transform = '' });
+    if (c) { const r = c.getBoundingClientRect(), x = (e.clientX - r.left) / r.width - .5, y = (e.clientY - r.top) / r.height - .5; c.style.transform = `perspective(700px) rotateX(${-y * 8}deg) rotateY(${x * 8}deg) translateY(-4px)` }
+  })
+}
+const rev = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('show'); rev.unobserve(e.target) } }), { threshold: .12 });
+document.querySelectorAll('section>h2,section>p,.tl,.step,#skills .card,#contact .card').forEach(el => { el.classList.add('reveal'); rev.observe(el) });
+const navL = [...document.querySelectorAll('header nav div a')];
+const spy = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) navL.forEach(a => a.classList.toggle('act', a.getAttribute('href') === '#' + e.target.id)) }), { rootMargin: '-45% 0px -50% 0px' });
+document.querySelectorAll('main>section[id]').forEach(x => spy.observe(x));
+addEventListener('scroll', () => $('#top2').classList.toggle('on', scrollY > 600));
 
 /* contact */
 $('#send').onclick = () => {
-  const n = $('#fn').value.trim(),
-    e = $('#fe').value,
-    m = $('#fm').value.trim();
-
-  if (!(n && /\S+@\S+\.\S+/.test(e) && m)) {
-    $('#msg').textContent =
-      'Enter your name, a valid email and a message.';
-    return;
-  }
-
-  location.href =
-    'mailto:rsarin166@gmail.com?subject=' +
-    encodeURIComponent('Message from ' + n) +
-    '&body=' +
-    encodeURIComponent(m + '\n\nReply to: ' + e);
-
-  $('#msg').textContent =
-    'Opening your email app to send the message.';
+  const n = $('#fn').value.trim(), e = $('#fe').value, m = $('#fm').value.trim();
+  if (!(n && /\S+@\S+\.\S+/.test(e) && m)) { $('#msg').textContent = 'Enter your name, a valid email and a message.'; return }
+  location.href = 'mailto:rsarin166@gmail.com?subject=' + encodeURIComponent('Message from ' + n) + '&body=' + encodeURIComponent(m + '\n\nReply to: ' + e); $('#msg').textContent = 'Opening your email app to send the message.'
 };
