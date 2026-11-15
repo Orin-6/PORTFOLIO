@@ -1,14 +1,10 @@
-
-const $ = s => document.querySelector(s),
+give me full code-- const $ = s => document.querySelector(s),
   css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim(),
   root = document.documentElement;
 
 $('#yr').textContent = new Date().getFullYear();
 
-/* ================================
-   PHOTO, PROGRESS & GLOW
-================================ */
-
+/* photo, progress, glow */
 const PHOTO = 'orin.jpg';
 
 if (PHOTO) {
@@ -28,17 +24,12 @@ if (matchMedia('(hover:hover) and (pointer:fine)').matches) {
   });
 }
 
-/* ================================
-   TYPING ANIMATION & COUNTERS
-================================ */
-
+/* typing + counters */
 const words = ['patterns.', 'insights.', 'forecasts.', 'answers.'];
-
 let wi = 0, ci = 0, del = false;
 
 (function type() {
   const w = words[wi];
-
   $('#typed').textContent = w.slice(0, ci);
 
   if (!del && ci === w.length) {
@@ -67,23 +58,15 @@ document.querySelectorAll('[data-count]').forEach(el => {
   }, 40);
 });
 
-/* ================================
-   NEURAL NETWORK BACKGROUND
-================================ */
-
-const nc = $('#net'),
-  nx = nc.getContext('2d');
-
-let nodes = [],
-  mouse = { x: -999, y: -999 };
+/* neural-network background */
+const nc = $('#net'), nx = nc.getContext('2d');
+let nodes = [], mouse = { x: -999, y: -999 };
 
 function nsize() {
-  const r = nc.getBoundingClientRect(),
-    d = devicePixelRatio || 1;
+  const r = nc.getBoundingClientRect(), d = devicePixelRatio || 1;
 
   nc.width = r.width * d;
   nc.height = r.height * d;
-
   nx.setTransform(d, 0, 0, d, 0, 0);
 
   nodes = Array.from(
@@ -110,7 +93,6 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
 
 (function loop() {
   const r = nc.getBoundingClientRect();
-
   nx.clearRect(0, 0, r.width, r.height);
 
   nodes.forEach((p, i) => {
@@ -134,12 +116,10 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
       if (d < 90) {
         nx.strokeStyle = css('--a');
         nx.globalAlpha = 1 - d / 90;
-
         nx.beginPath();
         nx.moveTo(p.x, p.y);
         nx.lineTo(q.x, q.y);
         nx.stroke();
-
         nx.globalAlpha = 1;
       }
     }
@@ -149,12 +129,10 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
     if (dm < 130) {
       nx.strokeStyle = css('--c');
       nx.globalAlpha = 1 - dm / 130;
-
       nx.beginPath();
       nx.moveTo(p.x, p.y);
       nx.lineTo(mouse.x, mouse.y);
       nx.stroke();
-
       nx.globalAlpha = 1;
     }
   });
@@ -162,26 +140,15 @@ const still = matchMedia('(prefers-reduced-motion:reduce)').matches;
   requestAnimationFrame(loop);
 })();
 
-/* ================================
-   REGRESSION PLAYGROUND
-================================ */
-
-const cv = $('#reg'),
-  cx = cv.getContext('2d');
-
-let pts = [],
-  W,
-  H,
-  line = null,
-  raf;
+/* regression playground */
+const cv = $('#reg'), cx = cv.getContext('2d');
+let pts = [], W, H, line = null, raf;
 
 function size() {
-  const r = cv.getBoundingClientRect(),
-    d = devicePixelRatio || 1;
+  const r = cv.getBoundingClientRect(), d = devicePixelRatio || 1;
 
   cv.width = r.width * d;
   cv.height = r.height * d;
-
   cx.setTransform(d, 0, 0, d, 0, 0);
 
   W = r.width;
@@ -216,15 +183,13 @@ function fit() {
     ['m', 'b', 'r2', 'mse'].forEach(k => {
       $('#' + k).textContent = '–';
     });
-
     return null;
   }
 
   const mx = pts.reduce((a, p) => a + p[0], 0) / n,
     my = pts.reduce((a, p) => a + p[1], 0) / n;
 
-  let sxy = 0,
-    sxx = 0;
+  let sxy = 0, sxx = 0;
 
   pts.forEach(p => {
     sxy += (p[0] - mx) * (p[1] - my);
@@ -235,7 +200,6 @@ function fit() {
     b = my - m * mx;
 
   stats(m, b);
-
   return { m, b };
 }
 
@@ -269,7 +233,6 @@ function draw() {
   if (L) {
     cx.strokeStyle = css('--a');
     cx.lineWidth = 2.5;
-
     cx.beginPath();
     cx.moveTo(0, H - L.b * H);
     cx.lineTo(W, H - (L.m + L.b) * H);
@@ -297,27 +260,21 @@ cv.addEventListener('pointerdown', e => {
 
   line = null;
   $('#epoch').textContent = '';
-
   draw();
 });
 
 $('#reset').onclick = () => {
   cancelAnimationFrame(raf);
-
   seed();
   $('#epoch').textContent = '';
-
   draw();
 };
 
 $('#clear').onclick = () => {
   cancelAnimationFrame(raf);
-
   pts = [];
   line = null;
-
   $('#epoch').textContent = '';
-
   draw();
 };
 
@@ -339,24 +296,20 @@ $('#train').onclick = () => {
 
   (function step() {
     for (let k = 0; k < 4; k++) {
-      let gm = 0,
-        gb = 0;
+      let gm = 0, gb = 0;
 
       pts.forEach(p => {
         const e = m * p[0] + b - p[1];
-
         gm += e * p[0];
         gb += e;
       });
 
       m -= lr * 2 * gm / n;
       b -= lr * 2 * gb / n;
-
       ep++;
     }
 
     line = { m, b };
-
     stats(m, b);
     draw();
 
@@ -375,14 +328,10 @@ $('#train').onclick = () => {
 };
 
 addEventListener('resize', size);
-
 seed();
 size();
 
-/* ================================
-   SKILLS
-================================ */
-
+/* skills */
 const S = {
   'Programming': [
     ['Python', 92],
@@ -436,7 +385,6 @@ const S = {
 };
 
 const keys = Object.keys(S);
-
 let cat = keys[0];
 
 function skills() {
@@ -448,22 +396,19 @@ function skills() {
 
   $('#skBody').innerHTML = Array.isArray(v[0])
     ? v.map(s => `
-        <div>
-          <div class="flex justify-between text-sm mb-1">
-            <span>${s[0]}</span>
-            <span class="muted">${s[1]}%</span>
-          </div>
-
-          <div class="bar">
-            <i data-w="${s[1]}"></i>
-          </div>
+      <div>
+        <div class="flex justify-between text-sm mb-1">
+          <span>${s[0]}</span>
+          <span class="muted">${s[1]}%</span>
         </div>
-      `).join('')
+        <div class="bar"><i data-w="${s[1]}"></i></div>
+      </div>
+    `).join('')
     : `
-        <div class="sm:col-span-2 flex flex-wrap gap-2">
-          ${v.map(s => `<span class="tag" style="font-size:.9rem;padding:.3rem .8rem">${s}</span>`).join('')}
-        </div>
-      `;
+      <div class="sm:col-span-2 flex flex-wrap gap-2">
+        ${v.map(s => `<span class="tag" style="font-size:.9rem;padding:.3rem .8rem">${s}</span>`).join('')}
+      </div>
+    `;
 
   requestAnimationFrame(() =>
     requestAnimationFrame(() =>
@@ -483,10 +428,6 @@ function skills() {
 
 skills();
 
-/* ================================
-   SKILLS RADAR CHART
-================================ */
-
 let radar;
 
 function buildRadar() {
@@ -502,7 +443,6 @@ function buildRadar() {
 
     data: {
       labels: keys.map(k => k.replace(' & ', ' &\n')),
-
       datasets: [{
         data: keys.map(avg),
         borderColor: css('--a'),
@@ -520,19 +460,9 @@ function buildRadar() {
         r: {
           min: 50,
           max: 100,
-
-          ticks: {
-            display: false
-          },
-
-          grid: {
-            color: css('--line')
-          },
-
-          angleLines: {
-            color: css('--line')
-          },
-
+          ticks: { display: false },
+          grid: { color: css('--line') },
+          angleLines: { color: css('--line') },
           pointLabels: {
             color: css('--ink'),
             font: { size: 11 }
@@ -545,10 +475,7 @@ function buildRadar() {
 
 buildRadar();
 
-/* ================================
-   PROJECTS
-================================ */
-
+/* projects */
 const P = [
   {
     t: 'Customer churn predictor',
@@ -579,25 +506,24 @@ const P = [
     url: 'https://github.com/Orin-6/DataBase'
   },
 
-  {
-    t: 'Telco Customer Churn Analysis',
-    c: 'Data Analysis',
-    d: 'Telecom customer churn analysis using reusable Pandas functions for data cleaning, type conversion, duplicate detection, outlier handling, missing-value treatment and feature engineering.',
-    s: ['Python', 'Pandas', 'NumPy', 'Kaggle'],
-    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
-  },
+ {
+  t: 'Telco-Customer-Churn',
+  c: 'Data Analysis',
+  d: 'Reusable pandas functions that fix types, duplicates, outliers and missing values.',
+  s: ['Pandas', 'NumPy', 'Kaggle'],
+  url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
+},
 
-  {
-    t: 'Fraud Analysis',
-    c: 'Data Analysis',
-    d: 'Exploratory analysis and dashboard-based monitoring of credit card transactions to identify fraudulent transaction patterns. This is an analytical project, not a production fraud detection system or a trained machine learning model.',
-    s: ['Excel', 'SQL', 'Tableau', 'Kaggle'],
-    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
-  }
+{
+  t: 'Fraud Analysis',
+  c: 'Data Analysis',
+  d: 'This project focuses on exploratory analysis and dashboard-based monitoring. It is not a production fraud detection system or a trained machine learning model.',
+  s: ['Excel', 'SQL', 'Tableau'],
+  url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
+   }
 ];
 
 const cats = ['All', ...new Set(P.map(p => p.c))];
-
 let cur = 'All';
 
 function render() {
@@ -609,7 +535,6 @@ function render() {
     .filter(p => cur === 'All' || p.c === cur)
     .map(p => `
       <article class="card lift p-5 flex flex-col">
-
         <p class="muted text-xs">${p.c}</p>
 
         <h3 class="font-bold text-lg mt-1">${p.t}</h3>
@@ -622,17 +547,14 @@ function render() {
 
         ${p.url ? `
           <div class="mt-5">
-            <a
-              href="${p.url}"
-              target="_blank"
-              rel="noopener noreferrer"
-              class="btn pri inline-block text-sm"
-            >
-              View on GitHub ↗
+            <a href="${p.url}"
+               target="_blank"
+               rel="noopener noreferrer"
+               class="btn pri inline-block text-sm">
+               View on GitHub ↗
             </a>
           </div>
         ` : ''}
-
       </article>
     `).join('');
 
@@ -646,10 +568,7 @@ function render() {
 
 render();
 
-/* ================================
-   CERTIFICATES
-================================ */
-
+/* certificates */
 const C = [
   {
     t: 'Machine Learning with Python',
@@ -658,7 +577,6 @@ const C = [
     ic: '🤖',
     url: 'https://github.com/Orin-6/Certificate/blob/main/IBM%20ML0101EN%20Certificate%20_%20Cognitive%20Class.pdf'
   },
-
   {
     t: 'Data Analysis',
     i: 'Ostad · 2026',
@@ -666,7 +584,6 @@ const C = [
     ic: '📊',
     url: 'https://github.com/Orin-6/Certificate/blob/main/Miss.%20Rabyea%20Sultana-Data%20Analytics%20Job%20Ready%20Program%2016-C47138%20(1).pdf'
   },
-
   {
     t: 'Python',
     i: 'freeCodeCamp · 2026',
@@ -676,34 +593,18 @@ const C = [
   }
 ];
 
-/* ================================
-   CERTIFICATE CARDS
-================================ */
-
+/* render cards */
 $('#certGrid').innerHTML = C.map((c, n) => `
-  <button
-    type="button"
-    class="card lift p-5 text-left"
-    data-n="${n}"
-  >
+  <button type="button" class="card lift p-5 text-left" data-n="${n}">
     <div class="text-3xl">${c.ic}</div>
-
     <h3 class="font-bold mt-3">${c.t}</h3>
-
     <p class="muted text-sm">${c.i}</p>
-
-    <p class="acc text-sm mt-3" style="color:var(--a)">
-      View details →
-    </p>
+    <p class="acc text-sm mt-3" style="color:var(--a)">View details →</p>
   </button>
 `).join('');
 
-/* ================================
-   CERTIFICATE MODAL
-================================ */
-
+/* modal */
 const dlg = $('#dlg');
-
 let activeCert = null;
 
 document.querySelectorAll('#certGrid button').forEach(b => {
@@ -722,24 +623,20 @@ document.querySelectorAll('#certGrid button').forEach(b => {
 
 $('#dX').onclick = () => dlg.close();
 
-/* Click outside modal to close */
-
+/* click outside the modal to close */
 dlg.addEventListener('click', e => {
   if (e.target === dlg) dlg.close();
 });
 
-/* Open certificate on GitHub */
-
+/* open certificate on GitHub in a new tab */
 $('#dV').onclick = () => {
   if (activeCert && activeCert.url) {
     window.open(activeCert.url, '_blank', 'noopener,noreferrer');
   }
 };
+/* End of Certificates */
 
-/* ================================
-   CONTACT
-================================ */
-
+/* contact */
 $('#send').onclick = () => {
   const n = $('#fn').value.trim(),
     e = $('#fe').value,
@@ -748,7 +645,6 @@ $('#send').onclick = () => {
   if (!(n && /\S+@\S+\.\S+/.test(e) && m)) {
     $('#msg').textContent =
       'Enter your name, a valid email and a message.';
-
     return;
   }
 
@@ -761,7 +657,3 @@ $('#send').onclick = () => {
   $('#msg').textContent =
     'Opening your email app to send the message.';
 };
-
-/* ================================
-   END OF PORTFOLIO JAVASCRIPT
-================================ */
