@@ -506,21 +506,21 @@ const P = [
     url: 'https://github.com/Orin-6/DataBase'
   },
 
-  {
-    t: 'Telco-Customer-Churn',
-    c: 'Data Analysis',
-    d: 'Reusable pandas functions that fix types, duplicates, outliers and missing values.',
-    s: ['Pandas', 'NumPy', 'Kaggle']
-    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
-  },
+ {
+  t: 'Telco-Customer-Churn',
+  c: 'Data Analysis',
+  d: 'Reusable pandas functions that fix types, duplicates, outliers and missing values.',
+  s: ['Pandas', 'NumPy', 'Kaggle'],
+  url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Telco-Customer-Churn'
+},
 
-  {
-    t: 'Fraud Analysis',
-    c: 'Data Analysis',
-    d: 'This project focuses on exploratory analysis and dashboard-based monitoring. It is not a production fraud detection system or a trained machine learning model.',
-    s: ['Excel', 'SQL', 'Tableau']
-    url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
-  }
+{
+  t: 'Fraud Analysis',
+  c: 'Data Analysis',
+  d: 'This project focuses on exploratory analysis and dashboard-based monitoring. It is not a production fraud detection system or a trained machine learning model.',
+  s: ['Excel', 'SQL', 'Tableau'],
+  url: 'https://github.com/Orin-6/Data-Analyst-Project-2.0/tree/main/Fraud-Analysis'
+}
 ];
 
 const cats = ['All', ...new Set(P.map(p => p.c))];
